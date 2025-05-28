@@ -8,20 +8,29 @@ document.getElementById("submit").addEventListener("click", function (e) {
     e.preventDefault()
     if (text.value == "" || amount.value == "") {
         alert("Enter appropriate values");
-        
     }
     else if (Number(amount.value) > 0) {
-        income.innerText = Number(income.innerText) + Number(amount.value);
-        balance.innerText = Number(balance.innerText) + Number(amount.value);
+        income.innerText = formatNumberWithCommas(Number(removeCommasFromNumber(income.innerText)) + Number(amount.value));
+        balance.innerText = formatNumberWithCommas(Number(removeCommasFromNumber(balance.innerText)) + Number(amount.value));
         history_div.innerHTML += `
             <p>${text.value} </p>
-            <p>${amount.value}</p>
+            <p>${formatNumberWithCommas(amount.value)}</p>
             `;
+        text.value = "";
+        amount.value = "";
     }
     else {
-        expense.innerText = Number(expense.innerText) + Number(amount.value);
-        balance.innerText = Number(balance.innerText) - Math.abs(Number(amount.value));
+        expense.innerText = formatNumberWithCommas(Number(removeCommasFromNumber(expense.innerText)) + Number(amount.value));
+        balance.innerText = formatNumberWithCommas(Number(removeCommasFromNumber(balance.innerText)) - Math.abs(Number(amount.value)));
+        text.value = "";
+        amount.value = "";
     }
-    text.value = "";
-    amount.value = "";
 });
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
+function removeCommasFromNumber(str) {
+    return parseInt(str.replace(/,/g, ""));
+}
